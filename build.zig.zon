@@ -1,0 +1,14 @@
+.{ 
+    .name = "vmt_test",
+    .version = "0.0.0",
+    .dependencies = .{
+        .zigwin32 = .{
+            .url = "https://github.com/fabioarnold/zigwin32/archive/b70e7f818d77a0c0f39b0bd9c549e16439ff5780.tar.gz",
+            .hash = "122037145d96670bcd62b87a00a1d0924053760c73bca6ea6daabfcf9a94855395ef",
+        },
+        .zig_bait = .{
+            .url = "https://github.com/SoraTenshi/zig-bait/archive/main.tar.gz",
+            .hash = "122051cf6e14c89d314c920e23015c56707ae2e519a735656f5f07a110bd9a939e66",
+        },
+    }
+}

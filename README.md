@@ -1,2 +1,2 @@
 # process-manzigulation
-A template to manipulate external processes
+My testing setup for my library called [zig-bait](https://github.com/SoraTenshi/zig-bait)
