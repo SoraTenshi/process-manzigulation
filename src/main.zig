@@ -28,8 +28,8 @@ export fn hooked_print(base: *anyopaque) callconv(.C) void {
 }
 
 export fn initiate(_: ?*anyopaque) callconv(.C) u32 {
-    console = Console.init("This is my testing console", true) catch null;
-    const vmt_hook = hook.safe_vmt.init(&hooked_print, hook.vmt.addressToVtable(0x0000000000523250), 1, std.heap.page_allocator) catch return 0;
+    console = Console.init("This is my testing console", false) catch null;
+    const vmt_hook = hook.safe_vmt.init(&hooked_print, hook.vmt.addressToVtable(0x00000000004F5070), 1, std.heap.page_allocator) catch return 0;
     if (console) |*c| {
         c.print(.good, "This is a {s}\n", .{"test"}) catch {};
         c.print(.info, "This is a {s}\n", .{"test"}) catch {};

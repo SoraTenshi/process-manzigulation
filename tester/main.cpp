@@ -1,7 +1,3 @@
-/*
-  This has been compiled with ASLR disabled, to be easier when testing.
-*/
-
 #include <cstdio>
 #include <cstdlib>
 #include <memory>
@@ -41,7 +37,8 @@ int main() {
     auto tester = std::make_unique<Tester>();
 
     while (true) {
-        std::cout << "VTable Address: 0x" << std::hex << std::setfill('0') << std::setw(16) << reinterpret_cast<uintptr_t**>(tester.get()) << std::endl;
+        std::cout << "Base Address: 0x" << std::hex << std::setfill('0') << std::setw(16) << reinterpret_cast<uintptr_t**>(tester.get()) << std::endl;
+        std::cout << "VTable Address: 0x" << std::hex << std::setfill('0') << std::setw(16) << reinterpret_cast<uintptr_t**>(tester.get())[0] << std::endl;
         std::cout << "Method[0] Address: 0x" << std::hex << std::setfill('0') << std::setw(16) << reinterpret_cast<uintptr_t***>(tester.get())[0][0] << std::endl;
         std::cout << "Method[1] Address: 0x" << std::hex << std::setfill('0') << std::setw(16) << reinterpret_cast<uintptr_t***>(tester.get())[0][1] << std::endl;
 
