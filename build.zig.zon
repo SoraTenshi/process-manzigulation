@@ -8,7 +8,11 @@
         },
         .zig_bait = .{
             .url = "https://github.com/SoraTenshi/zig-bait/archive/main.tar.gz",
-            .hash = "122051cf6e14c89d314c920e23015c56707ae2e519a735656f5f07a110bd9a939e66",
+            .hash = "12202cf366f9a6d91f3bf67446b8bb97f38941707c2cb3824ce41f98d36c8a0748b8",
         },
+        .zigwin_console = .{
+            .url = "https://github.com/SoraTenshi/zigwin-console/archive/main.tar.gz",
+            .hash = "1220ae044392eb1208ad2071ade0039e5aea7705aedb36ce7f64049bae20963d1fd2",
+        }
     }
 }

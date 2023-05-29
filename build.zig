@@ -5,6 +5,7 @@ pub fn build(b: *std.Build) void {
 
     const win = b.dependency("zigwin32", .{});
     const zig_bait = b.dependency("zig_bait", .{});
+    const zigwin_console = b.dependency("zigwin_console", .{});
 
     const vmt_hook_test = b.addSharedLibrary(.{
         .name = "vmt_hook_test",
@@ -15,5 +16,6 @@ pub fn build(b: *std.Build) void {
 
     vmt_hook_test.addModule("win", win.module("zigwin32"));
     vmt_hook_test.addModule("zig_bait", zig_bait.module("zig-bait"));
+    vmt_hook_test.addModule("zigwin_console", zigwin_console.module("zigwin-console"));
     b.installArtifact(vmt_hook_test);
 }

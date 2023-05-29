@@ -8,6 +8,9 @@ const zwin = win.everything;
 
 // Imports
 const hook = @import("zig_bait");
+const Console = @import("zigwin_console").Console;
+
+var console: ?Console = null;
 
 export fn hooked_print(base: *anyopaque) callconv(.C) void {
     const stdout = std.io.getStdOut().writer();
@@ -25,8 +28,14 @@ export fn hooked_print(base: *anyopaque) callconv(.C) void {
 }
 
 export fn initiate(_: ?*anyopaque) callconv(.C) u32 {
-    _ = zwin.MessageBoxA(null, "Test", "Successfully injected.", zwin.MB_OK);
-    const vmt_hook = hook.vmt.init(&hooked_print, hook.vmt.addressToVtable(0x00000000004E3EA0), 1) catch return 0;
+    console = Console.init("This is my testing console", true) catch null;
+    const vmt_hook = hook.safe_vmt.init(&hooked_print, hook.vmt.addressToVtable(0x0000000000523250), 1, std.heap.page_allocator) catch return 0;
+    if (console) |*c| {
+        c.print(.good, "This is a {s}\n", .{"test"}) catch {};
+        c.print(.info, "This is a {s}\n", .{"test"}) catch {};
+        c.print(.bad, "This is a {s}\n", .{"test"}) catch {};
+    }
+
     std.debug.print("[*] past init\n", .{});
     hook.global_hooks.?.append(vmt_hook) catch @panic("OOM");
 
@@ -38,6 +47,7 @@ export fn initiate(_: ?*anyopaque) callconv(.C) u32 {
 fn unload() callconv(.C) void {
     hook.restoreAll();
     hook.global_hooks.?.deinit();
+    console.?.deinit();
 }
 
 pub export fn DllMain(_: windows.HINSTANCE, reason: windows.DWORD, reserved: ?windows.LPVOID) windows.BOOL {
