@@ -19,7 +19,7 @@ export fn hooked_print(base: *anyopaque) callconv(.C) void {
         return;
     };
     const entry = hook.global_hooks.?.getLast().hook_option.vmt_option;
-    if (entry.getOriginalFunction(&hooked_print)) |original| {
+    if (entry.getOriginalFunction(&hooked_print, 1)) |original| {
         std.debug.print("Calling original @0x{x:0>16} with type: {*}\n", .{ @ptrToInt(original), original });
         original(base);
     } else |err| {
@@ -28,8 +28,8 @@ export fn hooked_print(base: *anyopaque) callconv(.C) void {
 }
 
 export fn initiate(_: ?*anyopaque) callconv(.C) u32 {
-    console = Console.init("This is my testing console", false) catch null;
-    const vmt_hook = hook.safe_vmt.init(&hooked_print, hook.vmt.addressToVtable(0x00000000004F5070), 1, std.heap.page_allocator) catch return 0;
+    console = Console.init("This is my testing console", true) catch null;
+    const vmt_hook = hook.safe_vmt.init(hook.vmt.addressToVtable(0x0000000000494E60), &.{1}, &.{@ptrToInt(&hooked_print)}, std.heap.page_allocator) catch return 0;
     if (console) |*c| {
         c.print(.good, "This is a {s}\n", .{"test"}) catch {};
         c.print(.info, "This is a {s}\n", .{"test"}) catch {};
@@ -38,9 +38,6 @@ export fn initiate(_: ?*anyopaque) callconv(.C) u32 {
 
     std.debug.print("[*] past init\n", .{});
     hook.global_hooks.?.append(vmt_hook) catch @panic("OOM");
-
-    var option = hook.global_hooks.?.getLast().hook_option;
-    option.vmt_option.enableDebug();
     return 0;
 }
 
