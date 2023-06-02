@@ -11,6 +11,7 @@ const hook = @import("zig_bait");
 const Console = @import("zigwin_console").Console;
 
 var console: ?Console = null;
+var hooks: ?hook.HookManager = null;
 
 export fn hooked_print(base: *anyopaque) callconv(.C) void {
     const stdout = std.io.getStdOut().writer();
@@ -18,39 +19,36 @@ export fn hooked_print(base: *anyopaque) callconv(.C) void {
         _ = zwin.MessageBoxA(null, "This should not have happened", "aaaaa", zwin.MB_OK);
         return;
     };
-    const entry = hook.global_hooks.?.getLast().hook_option.vmt_option;
-    if (entry.getOriginalFunction(&hooked_print, 1)) |original| {
+    if (hooks.?.getOriginalFunction(&hooked_print)) |original| {
         std.debug.print("Calling original @0x{x:0>16} with type: {*}\n", .{ @ptrToInt(original), original });
         original(base);
-    } else |err| {
-        stdout.print("calling orig fn failed. err: {any}\n", .{err}) catch return;
+    } else {
+        stdout.print("calling orig fn failed.\n", .{}) catch return;
     }
+    hooks.?.deinit();
 }
 
 export fn initiate(_: ?*anyopaque) callconv(.C) u32 {
     console = Console.init("This is my testing console", true) catch null;
-    const vmt_hook = hook.safe_vmt.init(hook.vmt.addressToVtable(0x0000000000494E60), &.{1}, &.{@ptrToInt(&hooked_print)}, std.heap.page_allocator) catch return 0;
+    hooks = hook.HookManager.init(std.heap.page_allocator);
     if (console) |*c| {
         c.print(.good, "This is a {s}\n", .{"test"}) catch {};
         c.print(.info, "This is a {s}\n", .{"test"}) catch {};
         c.print(.bad, "This is a {s}\n", .{"test"}) catch {};
     }
 
-    std.debug.print("[*] past init\n", .{});
-    hook.global_hooks.?.append(vmt_hook) catch @panic("OOM");
+    hooks.?.append(.safe_vmt, 0x0000000000476560, &.{1}, &.{@ptrToInt(&hooked_print)}, std.heap.page_allocator) catch {};
     return 0;
 }
 
 fn unload() callconv(.C) void {
-    hook.restoreAll();
-    hook.global_hooks.?.deinit();
+    hooks.?.deinit();
     console.?.deinit();
 }
 
 pub export fn DllMain(_: windows.HINSTANCE, reason: windows.DWORD, reserved: ?windows.LPVOID) windows.BOOL {
     switch (reason) {
         zwin.DLL_PROCESS_ATTACH => {
-            hook.global_hooks = hook.HookArrayList.init(std.heap.page_allocator);
             const thread = zwin.CreateThread(null, 0, &initiate, null, .THREAD_CREATE_RUN_IMMEDIATELY, null);
             if (thread != null) {
                 windows.CloseHandle(thread orelse return windows.FALSE);
