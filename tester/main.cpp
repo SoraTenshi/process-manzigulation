@@ -33,6 +33,10 @@ void printAddress(const std::string& prefix, T* obj, void (T::*ptr)()) {
     std::cout << prefix << std::hex << std::setfill('0') << std::setw(16) << functionAddress << std::endl;
 }
 
+void someFunction(const char *str) {
+    std::cout << "This is a typical function (not in vmt) with input: " << str << '\n';
+}
+
 int main() {
     auto tester = std::make_unique<Tester>();
 
@@ -41,10 +45,13 @@ int main() {
         std::cout << "VTable Address: 0x" << std::hex << std::setfill('0') << std::setw(16) << reinterpret_cast<uintptr_t**>(tester.get())[0] << std::endl;
         std::cout << "Method[0] Address: 0x" << std::hex << std::setfill('0') << std::setw(16) << reinterpret_cast<uintptr_t***>(tester.get())[0][0] << std::endl;
         std::cout << "Method[1] Address: 0x" << std::hex << std::setfill('0') << std::setw(16) << reinterpret_cast<uintptr_t***>(tester.get())[0][1] << std::endl;
+        std::cout << "Non-VMT Func Address: 0x" << std::hex << std::setfill('0') << std::setw(16) << reinterpret_cast<uintptr_t*>(&someFunction) << std::endl;
 
         tester->print();
         tester->another_print();
         getchar();
+
+        someFunction("hi");
     }
 
     return EXIT_SUCCESS;

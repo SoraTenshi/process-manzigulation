@@ -3,16 +3,16 @@
     .version = "0.0.0",
     .dependencies = .{
         .zigwin32 = .{
-            .url = "https://github.com/fabioarnold/zigwin32/archive/b70e7f818d77a0c0f39b0bd9c549e16439ff5780.tar.gz",
+            .url = "https://github.com/marlersoft/zigwin32/archive/main.tar.gz",
             .hash = "122037145d96670bcd62b87a00a1d0924053760c73bca6ea6daabfcf9a94855395ef",
         },
         .zig_bait = .{
             .url = "https://github.com/SoraTenshi/zig-bait/archive/main.tar.gz",
-            .hash = "122036345ca1877788b5821847cacfbeef9e11e2b488cd1b5742442dee04ee538224",
+            .hash = "12200a63a0d71c2891a730dc01b2dbccb8bb04f37b058fa97fcc4a02157fbbda0aa0",
         },
         .zigwin_console = .{
             .url = "https://github.com/SoraTenshi/zigwin-console/archive/main.tar.gz",
-            .hash = "1220ae044392eb1208ad2071ade0039e5aea7705aedb36ce7f64049bae20963d1fd2",
+            .hash = "122024f421881edc18d002c4e369ab4ce2233c55b08a066775272d0dba6d0297ab53",
         }
     }
 }

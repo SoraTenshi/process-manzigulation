@@ -37,7 +37,13 @@ export fn initiate(_: ?*anyopaque) callconv(.C) u32 {
         c.print(.bad, "This is a {s}\n", .{"test"}) catch {};
     }
 
-    hooks.?.append(.safe_vmt, 0x0000000000476560, &.{1}, &.{@ptrToInt(&hooked_print)}, std.heap.page_allocator) catch {};
+    hooks.?.append_vmt(
+        std.heap.page_allocator,
+        .safe_vmt,
+        0x00000000005344A0,
+        &.{1},
+        &.{@ptrToInt(&hooked_print)},
+    ) catch {};
     return 0;
 }
 
