@@ -15,12 +15,12 @@ var hooks: ?hook.HookManager = null;
 
 export fn hooked_print(base: *anyopaque) callconv(.C) void {
     const stdout = std.io.getStdOut().writer();
-    stdout.print("Successfully hooked to address: 0x{x:0>16}, coming from base class: 0x{x:0>16}\n", .{ @ptrToInt(&hooked_print), @ptrToInt(base) }) catch {
+    stdout.print("Successfully hooked to address: 0x{x:0>16}, coming from base class: 0x{x:0>16}\n", .{ @intFromPtr(&hooked_print), @intFromPtr(base) }) catch {
         _ = zwin.MessageBoxA(null, "This should not have happened", "aaaaa", zwin.MB_OK);
         return;
     };
     if (hooks.?.getOriginalFunction(&hooked_print)) |original| {
-        std.debug.print("Calling original @0x{x:0>16} with type: {*}\n", .{ @ptrToInt(original), original });
+        std.debug.print("Calling original @0x{x:0>16} with type: {*}\n", .{ @intFromPtr(original), original });
         original(base);
     } else {
         stdout.print("calling orig fn failed.\n", .{}) catch return;
@@ -42,7 +42,7 @@ export fn initiate(_: ?*anyopaque) callconv(.C) u32 {
         .safe_vmt,
         0x00000000005344A0,
         &.{1},
-        &.{@ptrToInt(&hooked_print)},
+        &.{@intFromPtr(&hooked_print)},
     ) catch {};
     return 0;
 }

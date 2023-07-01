@@ -8,7 +8,7 @@
         },
         .zig_bait = .{
             .url = "https://github.com/SoraTenshi/zig-bait/archive/main.tar.gz",
-            .hash = "12200a63a0d71c2891a730dc01b2dbccb8bb04f37b058fa97fcc4a02157fbbda0aa0",
+            .hash = "12207812b620a015e1538d0e800c0aa9905b045e40691e42c7aeee81d0e0822a0602",
         },
         .zigwin_console = .{
             .url = "https://github.com/SoraTenshi/zigwin-console/archive/main.tar.gz",
