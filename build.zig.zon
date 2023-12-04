@@ -1,18 +1,19 @@
-.{ 
+.{
     .name = "vmt_test",
     .version = "0.0.0",
     .dependencies = .{
         .zigwin32 = .{
             .url = "https://github.com/marlersoft/zigwin32/archive/main.tar.gz",
-            .hash = "122037145d96670bcd62b87a00a1d0924053760c73bca6ea6daabfcf9a94855395ef",
+            .hash = "1220f8d5028adceac0c6fc8ef554d82efef49ca48913393e9c2f5d73a66b58c8aaad",
         },
         .zig_bait = .{
             .url = "https://github.com/SoraTenshi/zig-bait/archive/main.tar.gz",
-            .hash = "12207812b620a015e1538d0e800c0aa9905b045e40691e42c7aeee81d0e0822a0602",
+            .hash = "1220ba1a16a731a15042ce028f45f4743991ba1b5e1e210e16df884771c55286dbfc",
         },
         .zigwin_console = .{
             .url = "https://github.com/SoraTenshi/zigwin-console/archive/main.tar.gz",
             .hash = "122024f421881edc18d002c4e369ab4ce2233c55b08a066775272d0dba6d0297ab53",
-        }
-    }
+        },
+    },
+    .paths = .{""},
 }
